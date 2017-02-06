@@ -11,7 +11,7 @@ class _main_():
 		p_c = Path('credentials.txt').resolve()
 		ftp = FtpFileTransfer(str(p_c))
 		ftp.connect()
-		p_s = Path('Desktop/celpp/smina').resolve()
+		p_s = Path('smina').resolve()
 		if(os.path.exists(str(p_s)) == False):
 			os.mkdir(str(p_s))
 			os.chdir(str(p_s))
