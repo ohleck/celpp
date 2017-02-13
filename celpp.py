@@ -2,8 +2,6 @@
 
 from FileTransfer import FtpFileTransfer
 import os
-import subprocess
-import shlex
 
 
 class _main_():
