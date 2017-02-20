@@ -8,12 +8,12 @@ class _main_():
 	
 	
 	def fetchData():
-		if os.path.isdir(os.path.expanduser("~/Desktop/celpp_data_data")) == False: #creates celpp_data folder on users desktop if not already there
-			os.mkdir(os.path.expanduser("~/Desktop/celpp_data_data"))
+		if os.path.isdir(os.path.expanduser("~/Desktop/celpp_data")) == False: #creates celpp_data folder on users desktop if not already there
+			os.mkdir(os.path.expanduser("~/Desktop/celpp_data"))
 		else: 
 			print("All Files will go into the celpp_data folder")
 			
-		cred = os.path.expanduser("~/Desktop/celpp_data_data/credentials.txt")
+		cred = os.path.expanduser("~/Desktop/celpp_data/credentials.txt")
 		try: #attempts to connect to file required to connect to ftp
 			print("Trying to open credentials.txt")
 			fo = open(cred, 'r')
