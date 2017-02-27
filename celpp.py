@@ -2,7 +2,7 @@
 
 from FileTransfer import FtpFileTransfer
 import os
-
+import shutil
 
 class _main_():
 	
@@ -62,6 +62,37 @@ class _main_():
 		print('challengedata has been updated. ' + str(count) + ' week(s) was/were just added.')		
 		print('Disconnecting from ftp')
 		ftp.disconnect()
+	
+	def	align():
+		wd = str(os.getcwd())
+		ans = wd +'/answers'
+		if os.path.isdir(ans)==False: #if the answers directory isnt formed make it
+			os.mkdir(wd+'/answers')
+		
+		data = os.listdir(wd)
+		for x in (data):#for each weeks data
+			if x=="readme.txt" or x=="latest.txt" or x=="answers" : 
+				pass
+			else:
+				toDir = wd +'/answers/' + x
+				if os.path.isdir(toDir)==False: #if the path to answers dir doesnt exist 
+					os.mkdir(toDir) #make directory
+					#docking code here
+					#get our results, output as file and zip
+					#shutil.make_archive(name,'zip', toDir)
+					
+				else:
+					filename = toDir + ".zip"
+					if os.path.isfile(filename): #if the zipped answers already exist, skip
+						pass
+					#else: 
+						#if the path exists, but there are no answers run docking
+						#docking code here
+						#get our results, output as file and zip
+						#shutil.make_archive(name,'zip', toDir)
+				
+				
+		
 		
 	def uploadData():#uploads zip files containing docking predictions to contestant folder specified in credentials.txt
 		print('Uploading files to box contestant folder')
@@ -90,10 +121,11 @@ class _main_():
 						pass	
 		print('All the files have been uploaded. Disconnecting from ftp')
 		ftp.disconnect()
-		
+	
 		
 	
 	fetchData()
+	align()
 	#uploadData()
 
 
