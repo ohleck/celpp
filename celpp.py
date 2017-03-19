@@ -125,7 +125,7 @@ class _main_():
 		
 	
 	fetchData()
-	#align()
+	align()
 	#uploadData()
 
 
