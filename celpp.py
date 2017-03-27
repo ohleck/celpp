@@ -65,6 +65,31 @@ class _main_():
 		print('challengedata has been updated. ' + str(count) + ' week(s) was/were just added.')		
 		print('Disconnecting from ftp')
 		ftp.disconnect()
+		
+		
+		
+		###get PDB files from databank that are associated with each protein for later use
+		##change directory
+		os.system('cd ' + wd)
+		
+		#create a folder that contains all pdb files from the PDB if it does not exist
+		if(os.path.isdir(wd + '/PDBfiles')==False):#creates challengedata folder if it doesn't exist
+			os.mkdir(wd + '/PDBfiles')
+			os.chdir(wd + '/PDBfiles')
+		else: 
+			os.chdir(wd + '/PDBfiles')
+			
+		#list of proteins that need to be downloaded
+		weeks = []
+		for(_, dirnames, _) in os.walk(wd + '/challengedata'): 
+			if (dirnames not in weeks): 
+				weeks.extend(dirnames)
+		proteins = [x for x in weeks if 'celpp' not in x]
+		
+		#download pdb using prody 
+		for x in proteins:
+			prody.fetchPDB(x, folder = wd + '/PDBfiles', copy = True, compressed = False)
+	
 	
 	def	align():
 		wd = str(os.getcwd())
