@@ -4,6 +4,9 @@ from FileTransfer import FtpFileTransfer
 import os
 import shutil
 
+
+
+
 class _main_():
 	
 	
@@ -65,31 +68,100 @@ class _main_():
 	
 	def	align():
 		wd = str(os.getcwd())
-		ans = wd +'/answers'
+		ans = wd +'/challengedata/answers'
 		if os.path.isdir(ans)==False: #if the answers directory isnt formed make it
-			os.mkdir(wd+'/answers')
+			os.mkdir(wd+'/challengedata/answers')
 		
-		data = os.listdir(wd)
+		data = os.listdir(wd+'/challengedata')
 		for x in (data):#for each weeks data
 			if x=="readme.txt" or x=="latest.txt" or x=="answers" : 
 				pass
 			else:
-				toDir = wd +'/answers/' + x
+				toDir = wd +'/challengedata/answers/' + x
 				if os.path.isdir(toDir)==False: #if the path to answers dir doesnt exist 
 					os.mkdir(toDir) #make directory
-					#docking code here
-					#get our results, output as file and zip
-					#shutil.make_archive(name,'zip', toDir)
+					#dock=os.listdir(wd+'/'+x)
+					#print(dock)
+					
 					
 				else:
+					dock=os.listdir(wd+'/challengedata/'+x)
+					for y in (dock):
+						if y=='readme.txt' or y=='new_release_structure_sequence_canonical.tsv' or y == 'new_release_structure_nonpolymer.tsv' or y=='new_release_crystallization_pH.tsv':
+							pass
+						else:
+							input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+							for z in (input):
+								if z.startswith("LMCSS") and z.endswith(".pdb"):
+									if(z.endswith("lig.pdb")):
+										pass
+									else:
+										sts = str("grep ATOM "+ z+" > lmcss_rec.pdb")
+										wd = os.getcwd()
+										os.chdir(wd+'/challengedata/'+x+'/'+y)
+										os.system(sts)
+										os.chdir(wd)
+										input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+										for z in (input):
+											if z.endswith(".smi"): #this is where weird issue/output arises...only with some input
+												wd = str(os.getcwd())
+												#print(z)
+												sts = str(" "+wd+'/challengedata/'+x+'/'+y+'/'+z +" lig.sdf --maxconfs 1")
+												os.chdir(wd+'/challengedata/'+x+'/'+y)
+												os.system(wd+'/rdkit-scripts/rdconf.py'+ sts)
+												os.chdir(wd)
+										input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+										for z in (input):
+											if z.endswith("lig.pdb"):
+												sts=str("smina -r lmcss_rec.pdb -l lig.sdf --autobox_ligand "+z+" -o lmcss_docked.sdf")
+												wd=str(os.getcwd())
+												os.chdir(wd+'/challengedata/'+x+'/'+y)
+												os.system(sts)
+												os.chdir(wd)
+											#access denied
+										input = os.listdir(wd+'/challengedata/'+x+'/'+y)		
+										#for z in (input):
+										#	if(z=='lmcss_docked.sdf'):
+										#		break
+												#wd = str(os.getcwd())							
+											#	sts=str(wd+"/challengedata/"+x+'/'+y+'/'+ " sdsorter lmcss_docked.sdf -print")
+								#				os.system(sts)
+								#			os.chdir(wd)
+										cur = str(os.getcwd()+'/challengedata/answers/'+x+'/'+y)
+										if (os.path.isdir(cur)==True):
+											os.chdir(wd+'/challengedata/'+x+'/'+y)
+											input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+											for i in (input):
+												if i.endswith("lig.pdb"):
+													sts=str("obrms -f "+i+" lmcss_docked.sdf")
+													os.system(sts)
+													curdir = str(wd+'/challengedata/'+x+'/'+y+'/lmcss_docked.sdf')
+													todir = str(wd+'/challengedata/answers/'+x+'/'+y+'/')
+													shutil.copy2(curdir, todir)
+													break
+											os.chdir(wd)
+										if(os.path.isdir(cur)==False):
+											os.mkdir(cur)
+											os.chdir(wd+'/challengedata/'+x+'/'+y)
+											input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+											for i in (input):
+												if i.endswith("lig.pdb"):
+													sts=str("obrms -f "+i+" lmcss_docked.sdf")
+													os.system(sts)				
+													curdir = str(wd+'/challengedata/'+x+'/'+y+'/lmcss_docked.sdf')
+													todir = str(wd+'/challengedata/answers/'+x+'/'+y+'/')
+													shutil.copy2(curdir, todir)
+													break
+											os.chdir(wd)
+								
+				
 					filename = toDir + ".zip"
 					if os.path.isfile(filename): #if the zipped answers already exist, skip
 						pass
 					#else: 
 						#if the path exists, but there are no answers run docking
 						#docking code here
-						#get our results, output as file and zip
-						#shutil.make_archive(name,'zip', toDir)
+						
 				
 				
 		
@@ -124,7 +196,7 @@ class _main_():
 	
 		
 	
-	fetchData()
+	#fetchData()
 	align()
 	#uploadData()
 
