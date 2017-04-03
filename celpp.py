@@ -9,10 +9,14 @@ import prody
 
 class _main_():
 	
+
+	
+	
 	
 	def fetchData():
-		 
-		wd = str(os.getcwd())
+		
+		global wd
+		wd = str(os.getcwd()) 
 		
 		print('All Files will go into the celpp folder')
 			
@@ -24,7 +28,7 @@ class _main_():
 		except: #writes file required to connect to ftp if not already made
 			print('Writing credentials.txt file')
 			fo = open(cred, 'w')
-			fo.write('host ftp.box.com\nuser pittcelpp@gmail.com\npass hail2pitt\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
+			fo.write('host ftp.box.com\nuser nlr23@pitt.edu\npass #hail2pitt1\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
 			fo.close()
 		
 		if(os.path.isdir(wd + '/challengedata')==False):#creates challengedata folder if it doesn't exist
@@ -67,32 +71,12 @@ class _main_():
 		ftp.disconnect()
 		
 		
-		
-		###get PDB files from databank that are associated with each protein for later use
-		##change directory
-		os.system('cd ' + wd)
-		
-		#create a folder that contains all pdb files from the PDB if it does not exist
-		if(os.path.isdir(wd + '/PDBfiles')==False):#creates challengedata folder if it doesn't exist
-			os.mkdir(wd + '/PDBfiles')
-			os.chdir(wd + '/PDBfiles')
-		else: 
-			os.chdir(wd + '/PDBfiles')
-			
-		#list of proteins that need to be downloaded
-		weeks = []
-		for(_, dirnames, _) in os.walk(wd + '/challengedata'): 
-			if (dirnames not in weeks): 
-				weeks.extend(dirnames)
-		proteins = [x for x in weeks if 'celpp' not in x]
-		
-		#download pdb using prody 
-		for x in proteins:
-			prody.fetchPDB(x, folder = wd + '/PDBfiles', copy = True, compressed = False)
 	
 	
 	def	align():
-		wd = str(os.getcwd())
+		
+		global wd 
+		
 		ans = wd +'/challengedata/answers'
 		if os.path.isdir(ans)==False: #if the answers directory isnt formed make it
 			os.mkdir(wd+'/challengedata/answers')
@@ -115,6 +99,7 @@ class _main_():
 						if y=='readme.txt' or y=='new_release_structure_sequence_canonical.tsv' or y == 'new_release_structure_nonpolymer.tsv' or y=='new_release_crystallization_pH.tsv':
 							pass
 						else:
+							
 							input = os.listdir(wd+'/challengedata/'+x+'/'+y)
 							for z in (input):
 								if z.startswith("LMCSS") and z.endswith(".pdb"):
@@ -187,8 +172,26 @@ class _main_():
 						#if the path exists, but there are no answers run docking
 						#docking code here
 						
-				
-				
+	def compare(): 
+		
+		###get PDB files from databank that are associated with each protein for later use
+		##change directory
+		
+		#create a folder that contains all pdb files from the PDB if it does not exist
+		prody.pathPDBFolder(wd + '/PDBfiles')
+			
+		#list of proteins that need to be downloaded
+		weeks = []
+		for(_, dirnames, _) in os.walk(wd + '/challengedata'): 
+			if (dirnames not in weeks): 
+				weeks.extend(dirnames)
+		proteins = [x for x in weeks if 'celpp' not in x]
+		
+		#download pdb using prody 
+		for x in proteins:
+			protein = prody.parsePDB(x)
+			#prody.superpose()		
+			
 		
 		
 	def uploadData():#uploads zip files containing docking predictions to contestant folder specified in credentials.txt
@@ -220,9 +223,10 @@ class _main_():
 		ftp.disconnect()
 	
 		
-	
-	#fetchData()
+
+	fetchData()
 	align()
+	#compare()
 	#uploadData()
 
 

@@ -287,6 +287,7 @@ class FtpFileTransfer(FileTransfer):
                 self._ftp = ftpretty(self.get_host(),
                                      self.get_user(),
                                      self.get_password(),
+                                     secure = True,
                                      timeout=self.get_connect_timeout())
                 return True
             except:
