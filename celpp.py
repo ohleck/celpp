@@ -28,7 +28,7 @@ class _main_():
 		except: #writes file required to connect to ftp if not already made
 			print('Writing credentials.txt file')
 			fo = open(cred, 'w')
-			fo.write('host ftp.box.com\nuser nlr23@pitt.edu\npass #hail2pitt1\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
+			fo.write('host ftp.box.com\nuser pittcelpp@gmail.com\npass hail2pitt\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
 			fo.close()
 		
 		if(os.path.isdir(wd + '/challengedata')==False):#creates challengedata folder if it doesn't exist
@@ -96,7 +96,7 @@ class _main_():
 				else:
 					dock=os.listdir(wd+'/challengedata/'+x)
 					for y in (dock):
-						if y=='readme.txt' or y=='new_release_structure_sequence_canonical.tsv' or y == 'new_release_structure_nonpolymer.tsv' or y=='new_release_crystallization_pH.tsv':
+						if y=='readme.txt' or y=='new_release_structure_sequence_canonical.tsv' or y == 'new_release_structure_nonpolymer.tsv' or y=='new_release_crystallization_pH.tsv' or y=='new_release_structure_sequence.tsv':
 							pass
 						else:
 							
@@ -127,7 +127,7 @@ class _main_():
 												wd=str(os.getcwd())
 												os.chdir(wd+'/challengedata/'+x+'/'+y)
 												os.system(sts)
-												os.chdir(wd)
+												os.chdir(wd+'/challengedata/')
 											#access denied
 										input = os.listdir(wd+'/challengedata/'+x+'/'+y)		
 										#for z in (input):
@@ -137,7 +137,7 @@ class _main_():
 											#	sts=str(wd+"/challengedata/"+x+'/'+y+'/'+ " sdsorter lmcss_docked.sdf -print")
 								#				os.system(sts)
 								#			os.chdir(wd)
-										cur = str(os.getcwd()+'/challengedata/answers/'+x+'/'+y)
+										cur = str(os.getcwd()+'/answers/'+x+'/'+y)
 										if (os.path.isdir(cur)==True):
 											os.chdir(wd+'/challengedata/'+x+'/'+y)
 											input = os.listdir(wd+'/challengedata/'+x+'/'+y)
@@ -162,7 +162,7 @@ class _main_():
 													todir = str(wd+'/challengedata/answers/'+x+'/'+y+'/')
 													shutil.copy2(curdir, todir)
 													break
-											os.chdir(wd)
+									os.chdir(wd)
 								
 				
 					filename = toDir + ".zip"
