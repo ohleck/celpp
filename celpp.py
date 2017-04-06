@@ -72,24 +72,24 @@ class _main_():
 	
 	def	align():
 		
-		global wd 	
+		global wd 
 		ans = wd +'/challengedata/answers'
 		if os.path.isdir(ans)==False: #if the answers directory isnt formed make it
 			os.mkdir(wd+'/challengedata/answers')	
 		data = os.listdir(wd+'/challengedata')
 		for x in (data):#for each weeks data
-			if x=="readme.txt" or x=="latest.txt" or x=="answers" : 
+			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" : 
 				pass
 			else:
 				toDir = wd +'/challengedata/answers/' + x
 				if os.path.isdir(toDir)==False: #if the path to answers dir doesnt exist 
-					os.mkdir(toDir) #make directory					
+					os.mkdir(toDir) #make directory		
 				dock=os.listdir(wd+'/challengedata/'+x)
 				for y in (dock):
 					a = str(os.getcwd()+'/answers/'+x+'/'+y+'/lmcss_docked.sdf')
 					if y=='readme.txt' or y=='new_release_structure_sequence_canonical.tsv' or y == 'new_release_structure_nonpolymer.tsv' or y=='new_release_crystallization_pH.tsv' or y=='new_release_structure_sequence.tsv':
 						pass
-					elif os.path.isfile(a)==True:
+					elif(os.path.isfile(a)==True):
 						pass
 					else:
 						input = os.listdir(wd+'/challengedata/'+x+'/'+y)
@@ -99,51 +99,51 @@ class _main_():
 									pass
 								else:
 									sts = str("grep ATOM "+ z+" > lmcss_rec.pdb")
-									wd = os.getcwd()
-									os.chdir(wd+'/challengedata/'+x+'/'+y)
+									cd = wd+'/challengedata'
+									os.chdir(cd+'/'+x+'/'+y)
 									os.system(sts)
-									os.chdir(wd)
-									input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+									os.chdir(cd)
+									input = os.listdir(cd+'/'+x+'/'+y)
 									for z in (input):
 										if z.endswith(".smi"): #this is where weird issue/output arises...only with some input
-											wd = str(os.getcwd())
+											cd = str(os.getcwd())
 											#print(z)
-											sts = str(" "+wd+'/challengedata/'+x+'/'+y+'/'+z +" lig.sdf --maxconfs 1")
-											os.chdir(wd+'/challengedata/'+x+'/'+y)
-											os.system(wd+'/rdkit-scripts/rdconf.py'+ sts)
-											os.chdir(wd)
-									input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+											sts = str(" "+cd+'/'+x+'/'+y+'/'+z +" lig.sdf --maxconfs 1")
+											os.chdir(cd+'/'+x+'/'+y)
+											os.system(cd+'/rdkit-scripts/rdconf.py'+ sts)
+											os.chdir(cd)
+									input = os.listdir(cd+'/'+x+'/'+y)
 									for z in (input):
 										if z.endswith("lig.pdb"):
 											sts=str("smina -r lmcss_rec.pdb -l lig.sdf --autobox_ligand "+z+" -o lmcss_docked.sdf")
-											wd=str(os.getcwd())
-											os.chdir(wd+'/challengedata/'+x+'/'+y)
+											cd=str(os.getcwd())
+											os.chdir(cd+'/'+x+'/'+y)
 											os.system(sts)
-											os.chdir(wd+'/challengedata/')
+											os.chdir(cd)
 									cur = str(os.getcwd()+'/answers/'+x+'/'+y)
 									if (os.path.isdir(cur)==True):
-										os.chdir(wd+'/challengedata/'+x+'/'+y)
-										input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+										os.chdir(cd+'/'+x+'/'+y)
+										input = os.listdir(cd+'/'+x+'/'+y)
 										for i in (input):
 											if i.endswith("lig.pdb"):
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
 												os.system(sts)
-												curdir = str(wd+'/challengedata/'+x+'/'+y+'/lmcss_docked.sdf')
-												todir = str(wd+'/challengedata/answers/'+x+'/'+y+'/')
+												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
+												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
 												print(curdir)
 												break
 										os.chdir(wd)
 									else:
 										os.mkdir(cur)
-										os.chdir(wd+'/challengedata/'+x+'/'+y)
-										input = os.listdir(wd+'/challengedata/'+x+'/'+y)
+										os.chdir(cd+'/'+x+'/'+y)
+										input = os.listdir(cd+'/'+x+'/'+y)
 										for i in (input):
 											if i.endswith("lig.pdb"):
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
 												os.system(sts)				
-												curdir = str(wd+'/challengedata/'+x+'/'+y+'/lmcss_docked.sdf')
-												todir = str(wd+'/challengedata/answers/'+x+'/'+y+'/')
+												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
+												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
 												print(curdir)
 												break
@@ -161,12 +161,15 @@ class _main_():
 		##change directory
 		
 		#create a folder that contains all pdb files from the PDB if it does not exist
-		prody.pathPDBFolder(wd + '/PDBfiles')
+		#os.mkdir(wd+'/challengedata/PDBfiles')
+		prody.pathPDBFolder(wd + '/challengedata/PDBfiles')
 			
 		#list of proteins that need to be downloaded
 		weeks = []
 		for(_, dirnames, _) in os.walk(wd + '/challengedata'): 
-			if (dirnames not in weeks): 
+			if (dirnames=='latest.txt' or dirnames=='answers' or dirnames =='rdkit-scripts'):
+				pass
+			elif (dirnames not in weeks): 
 				weeks.extend(dirnames)
 		proteins = [x for x in weeks if 'celpp' not in x]
 		
@@ -209,5 +212,5 @@ class _main_():
 
 	fetchData()
 	align()
-	#compare()
+	compare()
 	#uploadData()
