@@ -78,7 +78,7 @@ class _main_():
 			os.mkdir(wd+'/challengedata/answers')	
 		data = os.listdir(wd+'/challengedata')
 		for x in (data):#for each weeks data
-			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" : 
+			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" or x=='PDBfiles': 
 				pass
 			else:
 				toDir = wd +'/challengedata/answers/' + x
@@ -105,9 +105,8 @@ class _main_():
 									os.chdir(cd)
 									input = os.listdir(cd+'/'+x+'/'+y)
 									for z in (input):
-										if z.endswith(".smi"): #this is where weird issue/output arises...only with some input
+										if z.endswith(".smi"):
 											cd = str(os.getcwd())
-											#print(z)
 											sts = str(" "+cd+'/'+x+'/'+y+'/'+z +" lig.sdf --maxconfs 1")
 											os.chdir(cd+'/'+x+'/'+y)
 											os.system(cd+'/rdkit-scripts/rdconf.py'+ sts)
@@ -125,8 +124,11 @@ class _main_():
 										os.chdir(cd+'/'+x+'/'+y)
 										input = os.listdir(cd+'/'+x+'/'+y)
 										for i in (input):
-											if i.endswith("lig.pdb"):
+											if i.endswith("lig.pdb"): 
+												#see if pdb exists
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
+												#run obrms
+												# parse results and output to the visualization txt file
 												os.system(sts)
 												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
 												todir = str(cd+'/answers/'+x+'/'+y+'/')
@@ -148,20 +150,13 @@ class _main_():
 												print(curdir)
 												break
 								os.chdir(wd)				
-					filename = toDir + ".zip"
-					if os.path.isfile(filename): #if the zipped answers already exist, skip
-						pass
-					#else: 
-						#if the path exists, but there are no answers run docking
-						#docking code here
-						
+								
 	def compare(): 
 		
 		###get PDB files from databank that are associated with each protein for later use
 		##change directory
 		
 		#create a folder that contains all pdb files from the PDB if it does not exist
-		#os.mkdir(wd+'/challengedata/PDBfiles')
 		prody.pathPDBFolder(wd + '/challengedata/PDBfiles')
 			
 		#list of proteins that need to be downloaded
@@ -175,7 +170,10 @@ class _main_():
 		
 		#download pdb using prody 
 		for x in proteins:
-			protein = prody.parsePDB(x)
+			if x=='rdkit-scripts' or x=='PDBfiles' or x=='answers': 
+				pass
+			else:
+				protein = prody.parsePDB(x)
 			#prody.superpose()		
 			
 		
