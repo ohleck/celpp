@@ -75,7 +75,11 @@ class _main_():
 		global wd 
 		ans = wd +'/challengedata/answers'
 		if os.path.isdir(ans)==False: #if the answers directory isnt formed make it
-			os.mkdir(wd+'/challengedata/answers')	
+			os.mkdir(wd+'/challengedata/answers')
+		rddir = wd+'/challengedata/rdkit-scripts'
+		if os.path.isdir(rddir)==False:
+			a='git clone https://github.com/dkoes/rdkit-scripts'
+			os.system(a)
 		data = os.listdir(wd+'/challengedata')
 		for x in (data):#for each weeks data
 			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" or x=='PDBfiles' or x=='visual.txt': 
@@ -126,6 +130,8 @@ class _main_():
 										for i in (input):
 											if i.endswith("lig.pdb"): 
 												#see if pdb exists
+												protein = prody.fetchPDB(y)
+												prody.superpose(protein, 'lmcss_docked', weights=None)											
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
 												#run obrms
 												# parse results and output to the visualization txt file
@@ -146,6 +152,9 @@ class _main_():
 										input = os.listdir(cd+'/'+x+'/'+y)
 										for i in (input):
 											if i.endswith("lig.pdb"):
+												protein = prody.fetchPDB(y)
+												prody.superpose('lmcss_docked', protein, weights=None)											
+
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
 												os.system(sts)
 												os.chdir(wd+'/challengedata/')
@@ -181,7 +190,7 @@ class _main_():
 			if x=='rdkit-scripts' or x=='PDBfiles' or x=='answers': 
 				pass
 			else:
-				protein = prody.parsePDB(x)
+				protein = prody.fetchPDB(x)
 			#prody.superpose()		
 			
 		
@@ -218,5 +227,4 @@ class _main_():
 
 	fetchData()
 	align()
-	compare()
 	#uploadData()
