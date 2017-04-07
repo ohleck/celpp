@@ -131,7 +131,6 @@ class _main_():
 												# parse results and output to the visualization txt file
 												os.system(sts)
 												os.chdir(wd+'/challengedata/')
-												print(os.getcwd())
 												f=open('visual.txt', 'ab+')
 												f.write(x+'	smina	'+y+'\n')
 												f.close
@@ -150,7 +149,6 @@ class _main_():
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
 												os.system(sts)
 												os.chdir(wd+'/challengedata/')
-												print(os.getcwd())
 												f=open('visual.txt', 'ab+')
 												f.write(x+'	smina	'+y+'\n')
 												f.close
