@@ -78,7 +78,7 @@ class _main_():
 			os.mkdir(wd+'/challengedata/answers')	
 		data = os.listdir(wd+'/challengedata')
 		for x in (data):#for each weeks data
-			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" or x=='PDBfiles': 
+			if x=="readme.txt" or x=="latest.txt" or x=="answers" or x=="rdkit-scripts" or x=='PDBfiles' or x=='visual.txt': 
 				pass
 			else:
 				toDir = wd +'/challengedata/answers/' + x
@@ -130,6 +130,11 @@ class _main_():
 												#run obrms
 												# parse results and output to the visualization txt file
 												os.system(sts)
+												os.chdir(wd+'/challengedata/')
+												print(os.getcwd())
+												f=open('visual.txt', 'ab+')
+												f.write(x+'	smina	'+y+'\n')
+												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
 												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
@@ -143,7 +148,12 @@ class _main_():
 										for i in (input):
 											if i.endswith("lig.pdb"):
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
-												os.system(sts)				
+												os.system(sts)
+												os.chdir(wd+'/challengedata/')
+												print(os.getcwd())
+												f=open('visual.txt', 'ab+')
+												f.write(x+'	smina	'+y+'\n')
+												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
 												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
