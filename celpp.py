@@ -28,7 +28,7 @@ class _main_():
 		except: #writes file required to connect to ftp if not already made
 			print('Writing credentials.txt file')
 			fo = open(cred, 'w')
-			fo.write('host ftp.box.com\nuser pittcelpp@gmail.com\npass hail2pitt\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
+			fo.write('host ftp.box.com\nuser nlr23@pitt.edu\npass h@il2pitt1\npath\ncontestantid 33824\nchallengepath /challengedata\nsubmissionpath /33824')
 			fo.close()
 		
 		if(os.path.isdir(wd + '/challengedata')==False):#creates challengedata folder if it doesn't exist
