@@ -69,21 +69,48 @@ def box_plot(rmsd, week_num):
     for x in x_data:
         data = rmsd.get(x)
         y_data.append(data)
+    
+    y_best_rmsd = []
+    y_first_rmsd = []
+    for y in y_data:
+        min_rmsd = min(y)
+        first_rmsd = y[0]
+        y_best_rmsd.append(min_rmsd)
+        y_first_rmsd.append(first_rmsd)
     N = len(x_data)
     colors = ['hsl('+str(h)+',50%'+',50%)' for h in np.linspace(0, 360, N)]
 
     traces = []
 
-    for xd, yd, cls in zip(x_data, y_data, colors):
-        traces.append(go.Box(
+    for xd, yd, ybest, yfirst, cls in zip(x_data, y_data, y_best_rmsd, y_first_rmsd, colors):
+        traces.append(go.Box( 
                 y=yd,
                 name=xd,
                 boxpoints='all',
-                jitter=0.5,
-                whiskerwidth=0.2,
+                jitter=1,
+                whiskerwidth=1,
+                pointpos = -2,
                 fillcolor=cls,
-                marker=dict(size=2,),
-                line=dict(width=1),))
+                marker=dict(size=3,),
+                line=dict(width=1.5),))
+        
+        traces.append(go.Scatter(
+            showlegend = True, 
+            legendgroup = 'Best RMSD', 
+            y = ybest, 
+            x = xd, 
+            name = xd + ' Best RMSD', 
+            fillcolor=cls,
+            marker = dict(size = 15, symbol = 'square-open', ), ))
+        
+        traces.append(go.Scatter(
+            showlegend = True, 
+            legendgroup = 'First Pose RMSD', 
+            y = yfirst, 
+            x = xd, 
+            name = xd + ' First Pose RMSD', 
+            fillcolor = cls, 
+            marker = dict(size = 15, symbol = 'star', ),))
 
         layout = go.Layout(title='RMSD for all Targets in Week' + str(week_num),
                            yaxis=dict(autorange=True,showgrid=True,zeroline=True,dtick=5,
