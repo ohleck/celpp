@@ -102,10 +102,8 @@ class _main_():
 								if(z.endswith("lig.pdb")):
 									pass
 								else:
-<<<<<<< HEAD
 									id=z.strip('.pdb')
-=======
->>>>>>> 2e7400aca90bb991775654a69e661c209dac1dcc
+
 									sts = str("grep ATOM "+ z+" > lmcss_rec.pdb")#creates receptor .pdb file
 									cd = wd+'/challengedata'
 									os.chdir(cd+'/'+x+'/'+y)#change directory to week/ligand
@@ -122,17 +120,15 @@ class _main_():
 											
 									for z in (input): # runs smina
 										if z.endswith("lig.pdb"):
-<<<<<<< HEAD
 											sts=str("smina -r lmcss_rec.pdb -l lig.sdf --autobox_ligand "+z+" -o "+id+"_docked.sdf")
 											cd=str(os.getcwd())#lignad directory
 											os.chdir(cd+'/'+x+'/'+y)
 											#os.system(sts)
-=======
+
 											sts=str("smina -r lmcss_rec.pdb -l lig.sdf --autobox_ligand "+z+" -o lmcss_docked.sdf")
 											cd=str(os.getcwd())#lignad directory
 											os.chdir(cd+'/'+x+'/'+y)
 											os.system(sts)
->>>>>>> 2e7400aca90bb991775654a69e661c209dac1dcc
 											os.chdir(cd)
 											
 									cur = str(os.getcwd()+'/answers/'+x+'/'+y)
@@ -140,7 +136,6 @@ class _main_():
 										os.chdir(cd+'/'+x+'/'+y)
 										os.getcwd()##
 										input = os.listdir(cd+'/'+x+'/'+y)
-<<<<<<< HEAD
 										
 										for i in (input):
 											if i.endswith(".txt") and i!="center.txt" and i!="visual.txt":
@@ -166,7 +161,6 @@ class _main_():
 												f.write(x+'	smina	'+y+'\n')
 												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/'+id+'_docked.sdf')
-=======
 										print(input)##
 										for i in (input):
 											if i.endswith("lig.pdb"): 
@@ -184,7 +178,6 @@ class _main_():
 												f.write(x+'	smina	'+y+'\n')
 												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
->>>>>>> 2e7400aca90bb991775654a69e661c209dac1dcc
 												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
 												print(curdir)
@@ -195,7 +188,6 @@ class _main_():
 										os.chdir(cd+'/'+x+'/'+y)
 										input = os.listdir(cd+'/'+x+'/'+y)
 										for i in (input):
-<<<<<<< HEAD
 											if i.endswith(".txt") and i!="center.txt" and i!="visual.txt":
 												f=open(i)
 												lines=f.readlines()
@@ -217,7 +209,6 @@ class _main_():
 												f.write(x+'	smina	'+y+'\n')
 												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/'+id+'_docked.sdf')
-=======
 											if i.endswith("lig.pdb"):
 												protein = prody.fetchPDB(y)
 												prody.writeArray('lmcss_docked_array.sdf', array)
@@ -230,7 +221,6 @@ class _main_():
 												f.write(x+'	smina	'+y+'\n')
 												f.close
 												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
->>>>>>> 2e7400aca90bb991775654a69e661c209dac1dcc
 												todir = str(cd+'/answers/'+x+'/'+y+'/')
 												shutil.copy(curdir, todir)
 												print(curdir)
@@ -296,8 +286,5 @@ class _main_():
 
 	fetchData()
 	align()
-<<<<<<< HEAD
 	#uploadData()
-=======
 	#uploadData()
->>>>>>> 2e7400aca90bb991775654a69e661c209dac1dcc
