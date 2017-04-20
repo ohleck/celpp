@@ -2,7 +2,7 @@
 
 from FileTransfer import FtpFileTransfer
 import os
-import shutil
+import subprocess
 import prody
 
 
@@ -131,19 +131,35 @@ class _main_():
 											if i.endswith("lig.pdb"): 
 												#see if pdb exists
 												protein = prody.fetchPDB(y)
-												prody.superpose(protein, 'lmcss_docked', weights=None)											
+												f =open('sdsorted.txt','ab+')
+												bind =subprocess.check_output('sdsorter lmcss_docked.sdf -print', shell=True)
+												f.write(bind)
+												f.close()
+												k=open('sdsorted.txt')
+												lines = k.readlines()
+												bind=lines[1].strip('1		')
+												bind =bind.split("	",1)
+												print(bind[0])
+												k.close()
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
+												f=open('rmsd.txt', 'ab+')
+												rm =subprocess.check_output(sts, shell=True)
+												f.write(rm)
+												f.close()
+												j=open('rmsd.txt')
+												lines=j.readlines()
+												top=lines[1].strip('RMSD : ')
+												top=top.replace('\n','')
+												j.close()
+												print top
 												#run obrms
 												# parse results and output to the visualization txt file
-												os.system(sts)
-												os.chdir(wd+'/challengedata/')
+												#os.system(sts)
 												f=open('visual.txt', 'ab+')
-												f.write(x+'	smina	'+y+'\n')
+												f.write(x+'	smina	'+y+'	'+top+'	'+bind[0]+'\n')
 												f.close
-												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
-												todir = str(cd+'/answers/'+x+'/'+y+'/')
-												shutil.copy(curdir, todir)
-												print(curdir)
+												os.chdir(wd+'/challengedata/')
+												print(x+'    '+y)
 												break
 										os.chdir(wd)
 									else:
@@ -153,18 +169,33 @@ class _main_():
 										for i in (input):
 											if i.endswith("lig.pdb"):
 												protein = prody.fetchPDB(y)
-												prody.superpose('lmcss_docked', protein, weights=None)											
-
+												f=open('sdsorted.txt','ab+')
+												bind =subprocess.check_output('sdsorter lmcss_docked.sdf -print', shell=True)
+												f.write(bind)
+												f.close()
+												k=open('sdsorted.txt')
+												lines = k.readlines()
+												bind=lines[1].strip('1		')
+												bind =bind.split("	",1)
+												print(bind[0])
+												k.close()
 												sts=str("obrms -f "+i+" lmcss_docked.sdf")
-												os.system(sts)
-												os.chdir(wd+'/challengedata/')
+												f=open('rmsd.txt', 'ab+')
+												rm =subprocess.check_output(sts, shell=True)
+												f.write(rm)
+												f.close()
+												j=open('rmsd.txt')
+												lines=j.readlines()
+												top=lines[1].strip('RMSD : ')
+												top=top.replace('\n','')
+												print top
+												j.close()
+												#os.system(sts)
 												f=open('visual.txt', 'ab+')
-												f.write(x+'	smina	'+y+'\n')
-												f.close
-												curdir = str(cd+'/'+x+'/'+y+'/lmcss_docked.sdf')
-												todir = str(cd+'/answers/'+x+'/'+y+'/')
-												shutil.copy(curdir, todir)
-												print(curdir)
+												f.write(x+'	smina	'+y+'	'+top+'	'+bind[0]+'\n')
+												f.close()
+												os.chdir(wd+'/challengedata/')
+												print(x+'    '+y)
 												break
 								os.chdir(wd)				
 								
